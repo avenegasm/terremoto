@@ -39,18 +39,14 @@ public class EarthquakeServiceImpl implements IEarthquakeService {
         String hasta = new SimpleDateFormat(date_pattern).format(fin);
         LOGGER.info("Consultando listado de sismos por rango de fechas :{},{}",desde,hasta);
         final String uri = endpointEarthquakeApi +"&starttime="+desde+"&endtime="+hasta;
-        EarthquakeResponseDto result = callApiEarthquake(uri);
-        if(result.getFeatures() == null || result.getFeatures().isEmpty()){
-            LOGGER.warn("Consulta exitosa, pero no se han encontrado registros");
-        }else {
-            LOGGER.info("Consulta exitosa, se han encontrado :{} sismos", result.getFeatures().size());
-        }
-        return result;
+        return callApiEarthquake(uri);
     }
 
     @Override
     public EarthquakeResponseDto getByMagnitudRange(Double inicio, Double fin) {
-        return null;
+        LOGGER.info("Consultando listado de sismos por rango de magnitudes :{},{}",inicio,fin);
+        final String uri = endpointEarthquakeApi +"&minmagnitude="+inicio+"&maxmagnitude="+fin;
+        return callApiEarthquake(uri);
     }
 
     @Override
@@ -60,9 +56,15 @@ public class EarthquakeServiceImpl implements IEarthquakeService {
 
     private EarthquakeResponseDto callApiEarthquake(String url){
         try {
-            LOGGER.debug("Consumiendo API , url :{}",url);
+            LOGGER.info("Consumiendo API , url :{}",url);
             RestTemplate restTemplate = new RestTemplate();
-            return restTemplate.getForObject(url, EarthquakeResponseDto.class);
+            EarthquakeResponseDto result= restTemplate.getForObject(url, EarthquakeResponseDto.class);
+            if(result.getFeatures() == null || result.getFeatures().isEmpty()){
+                LOGGER.warn("Consulta exitosa, pero no se han encontrado registros");
+            }else {
+                LOGGER.info("Consulta exitosa, se han encontrado :{} sismos", result.getFeatures().size());
+            }
+            return result;
         }catch (RestClientException ex){
             LOGGER.error(API_ERROR,ex);
             throw new ExternalApiException(API_ERROR);
