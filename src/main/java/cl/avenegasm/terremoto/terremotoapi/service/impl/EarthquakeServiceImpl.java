@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -65,6 +66,18 @@ public class EarthquakeServiceImpl implements IEarthquakeService {
         List<FeatureDto> featureDtos = getByRangoFecha(inicio1,fin1).getFeatures();
         featureDtos.addAll(getByRangoFecha(inicio2,fin2).getFeatures());
         return new EarthquakeResponseDto(featureDtos);
+    }
+
+    @Override
+    public EarthquakeResponseDto getByPais(String pais) {
+        EarthquakeResponseDto dataCompleta = this.callApiEarthquake(endpointEarthquakeApi);
+        List<FeatureDto> filtrados= new ArrayList<>();
+        dataCompleta.getFeatures().forEach(featureDto -> {
+            if(pais.equalsIgnoreCase(featureDto.getProperties().getPlace().substring(featureDto.getProperties().getPlace().lastIndexOf(",")))){
+                filtrados.add(featureDto);
+            }
+        });
+        return new EarthquakeResponseDto(filtrados);
     }
 
     private EarthquakeResponseDto callApiEarthquake(String url){
