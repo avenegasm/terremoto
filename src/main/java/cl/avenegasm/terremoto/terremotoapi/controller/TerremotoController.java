@@ -1,8 +1,16 @@
 package cl.avenegasm.terremoto.terremotoapi.controller;
 
+import cl.avenegasm.terremoto.terremotoapi.dto.EarthquakeResponseDto;
+import cl.avenegasm.terremoto.terremotoapi.service.IEarthquakeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.util.Date;
 
 /**
  * @author Alejandro Venegas
@@ -13,12 +21,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/terremoto")
 public class TerremotoController {
 
+    @Autowired
+    IEarthquakeService earthquakeService;
+
     /**
-     * Rest de acceso restringido, arquetipo
-     * @return
+     * Rest de acceso restringido,permite consultar los sismos dentro de un rango de dos fechas.
+     * @return objeto de transferencia con todos los sismos
      */
-    @GetMapping("/hola")
-    public String hola(){
-        return "Hola";
+    @GetMapping("/fecha")
+    public EarthquakeResponseDto fechas(@RequestParam @Valid @DateTimeFormat(pattern="yyyy-MM-dd") Date inicio,
+                                        @RequestParam @Valid @DateTimeFormat(pattern="yyyy-MM-dd") Date fin){
+      return earthquakeService.getByRangoFecha(inicio,fin);
     }
 }

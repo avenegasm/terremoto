@@ -13,3 +13,4 @@ spring:
 terremoto:
   sign-jwt: a123
   allowed-key: b123
+  url: https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson
