@@ -12,6 +12,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -76,18 +77,26 @@ public class EarthquakeServiceImpl implements IEarthquakeService {
         return new EarthquakeResponseDto(filtrados);
     }
 
+    @Override
+    public EarthquakeResponseDto getByPaisFechas(String pais1, String pais2, Date inicio, Date fin) {
+        EarthquakeResponseDto dataCompleta = this.getByRangoFecha(inicio,fin);
+        List<FeatureDto> sismosFiltrados = this.filtrarPorPais(dataCompleta.getFeatures(),pais1,pais2);
+        LOGGER.info("Se han encontrado {} sismos filtrados para los paises  {} {}",pais1,pais2);
+        return new EarthquakeResponseDto(sismosFiltrados);
+    }
+
     /**
      * Metodo que permite filtrar un listado de sismos por un pais dado
      * @param sismos
      * @param pais
      * @return
      */
-    private  List<FeatureDto> filtrarPorPais(List<FeatureDto> sismos,String pais){
+    private  List<FeatureDto> filtrarPorPais(List<FeatureDto> sismos,String... pais){
        List<FeatureDto> filtrados= new ArrayList<>();
        sismos.forEach(featureDto -> {
            String paisCortado = (featureDto.getProperties().getPlace().contains(",")) ? featureDto.getProperties().getPlace().substring(
                    featureDto.getProperties().getPlace().lastIndexOf(",")+1).trim() : null;
-           if(pais.equalsIgnoreCase(paisCortado)){
+           if(Arrays.asList(pais).contains(paisCortado)){
                filtrados.add(featureDto);
            }
        });
