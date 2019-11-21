@@ -33,4 +33,14 @@ public class TerremotoController {
                                         @RequestParam @Valid @DateTimeFormat(pattern="yyyy-MM-dd") Date fin){
       return earthquakeService.getByRangoFecha(inicio,fin);
     }
+
+    /**
+     * Rest de acceso restringido, permite consultar los sismos dentro de un rango de magnitudes.
+     * @return objeto de transferencia con todos los sismos
+     */
+    @GetMapping("/magnitud")
+    public EarthquakeResponseDto magnitudes(@RequestParam @Valid Double inicio,
+                                            @RequestParam @Valid Double fin){
+        return earthquakeService.getByMagnitudRange(inicio,fin);
+    }
 }
