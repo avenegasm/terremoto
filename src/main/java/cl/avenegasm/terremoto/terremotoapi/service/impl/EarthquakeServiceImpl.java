@@ -1,6 +1,7 @@
 package cl.avenegasm.terremoto.terremotoapi.service.impl;
 
 import cl.avenegasm.terremoto.terremotoapi.dto.EarthquakeResponseDto;
+import cl.avenegasm.terremoto.terremotoapi.dto.FeatureDto;
 import cl.avenegasm.terremoto.terremotoapi.exception.ExternalApiException;
 import cl.avenegasm.terremoto.terremotoapi.service.IEarthquakeService;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Alejandro Venegas
@@ -49,9 +51,20 @@ public class EarthquakeServiceImpl implements IEarthquakeService {
         return callApiEarthquake(uri);
     }
 
+    /**
+     * Servicio que permite obtener listado de sismos en dos rangos de fechas,
+     * se invoca a la api dos veces, ya que no se conoce otro endpoint que agrupe rangos de fechas.
+     * @param inicio1
+     * @param fin1
+     * @param inicio2
+     * @param fin2
+     * @return
+     */
     @Override
     public EarthquakeResponseDto getByRangoFecha(Date inicio1, Date fin1, Date inicio2, Date fin2) {
-        return null;
+        List<FeatureDto> featureDtos = getByRangoFecha(inicio1,fin1).getFeatures();
+        featureDtos.addAll(getByRangoFecha(inicio2,fin2).getFeatures());
+        return new EarthquakeResponseDto(featureDtos);
     }
 
     private EarthquakeResponseDto callApiEarthquake(String url){
