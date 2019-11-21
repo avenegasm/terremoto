@@ -43,4 +43,16 @@ public class TerremotoController {
                                             @RequestParam @Valid Double fin){
         return earthquakeService.getByMagnitudRange(inicio,fin);
     }
+
+    /**
+     * Rest que permite consultar los sismos dentro de un rango de cuatro fechas, en dos rangos.
+     * @return objeto de transferencia con todos los sismos
+     */
+    @GetMapping("/fechas")
+    public EarthquakeResponseDto fechas(@RequestParam @Valid @DateTimeFormat(pattern="yyyy-MM-dd") Date inicio1,
+                                        @RequestParam @Valid @DateTimeFormat(pattern="yyyy-MM-dd") Date fin1,
+                                        @RequestParam @Valid @DateTimeFormat(pattern="yyyy-MM-dd") Date inicio2,
+                                        @RequestParam @Valid @DateTimeFormat(pattern="yyyy-MM-dd") Date fin2){
+        return earthquakeService.getByRangoFecha(inicio1,fin1,inicio2,fin2);
+    }
 }
