@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 public class EarthquakeResponseDto implements Serializable {
 
-    private String type;
     private List<FeatureDto> features;
 
 }
