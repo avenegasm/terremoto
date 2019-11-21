@@ -64,4 +64,16 @@ public class TerremotoController {
     public EarthquakeResponseDto pais(@RequestParam @Valid String pais){
         return earthquakeService.getByPais(pais);
     }
+
+    /**
+     * Rest de acceso restringido,permite consultar los sismos dentro de un rango de dos fechas.
+     * @return objeto de transferencia con todos los sismos
+     */
+    @GetMapping("/fecha-paises")
+    public EarthquakeResponseDto fechas(@RequestParam @Valid String pais1,
+                                        @RequestParam @Valid String pais2,
+                                        @RequestParam @Valid @DateTimeFormat(pattern="yyyy-MM-dd") Date inicio,
+                                        @RequestParam @Valid @DateTimeFormat(pattern="yyyy-MM-dd") Date fin){
+        return earthquakeService.getByPaisFechas(pais1,pais2,inicio,fin);
+    }
 }
