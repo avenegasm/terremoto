@@ -55,4 +55,13 @@ public class TerremotoController {
                                         @RequestParam @Valid @DateTimeFormat(pattern="yyyy-MM-dd") Date fin2){
         return earthquakeService.getByRangoFecha(inicio1,fin1,inicio2,fin2);
     }
+
+    /**
+     * Rest que permite obtener listado de sismos por determinado pais
+     * @return objeto de transferencia con todos los sismos
+     */
+    @GetMapping("/pais")
+    public EarthquakeResponseDto pais(@RequestParam @Valid String pais){
+        return earthquakeService.getByPais(pais);
+    }
 }

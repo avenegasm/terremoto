@@ -70,14 +70,28 @@ public class EarthquakeServiceImpl implements IEarthquakeService {
 
     @Override
     public EarthquakeResponseDto getByPais(String pais) {
-        EarthquakeResponseDto dataCompleta = this.callApiEarthquake(endpointEarthquakeApi);
-        List<FeatureDto> filtrados= new ArrayList<>();
-        dataCompleta.getFeatures().forEach(featureDto -> {
-            if(pais.equalsIgnoreCase(featureDto.getProperties().getPlace().substring(featureDto.getProperties().getPlace().lastIndexOf(",")))){
-                filtrados.add(featureDto);
-            }
-        });
+        EarthquakeResponseDto dataCompleta = this.callApiEarthquake(endpointEarthquakeApi+"&minmagnitude=2.0");
+        List<FeatureDto> filtrados= this.filtrarPorPais(dataCompleta.getFeatures(),pais);
+        LOGGER.info("Se han encontrado {} sismos filtrados para el pais {}",filtrados.size(),pais);
         return new EarthquakeResponseDto(filtrados);
+    }
+
+    /**
+     * Metodo que permite filtrar un listado de sismos por un pais dado
+     * @param sismos
+     * @param pais
+     * @return
+     */
+    private  List<FeatureDto> filtrarPorPais(List<FeatureDto> sismos,String pais){
+       List<FeatureDto> filtrados= new ArrayList<>();
+       sismos.forEach(featureDto -> {
+           String paisCortado = (featureDto.getProperties().getPlace().contains(",")) ? featureDto.getProperties().getPlace().substring(
+                   featureDto.getProperties().getPlace().lastIndexOf(",")+1).trim() : null;
+           if(pais.equalsIgnoreCase(paisCortado)){
+               filtrados.add(featureDto);
+           }
+       });
+       return filtrados;
     }
 
     private EarthquakeResponseDto callApiEarthquake(String url){
