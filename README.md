@@ -15,7 +15,7 @@ Se debe autorizar el uso de la api Mediante una **api-key**, _(b123)_ esta api k
 > Ej Login : http://localhost:8080/api/authenticate/token/b123
 
 Una vez obtenido el Token JWT en la respuesta de authenticate, debe ser enviado en cada unas de las consultas REST dentro del **Header** : **Authorization**
-> Autorizarion = Bearer ey123456789abcd
+> Authorization = Bearer ey123456789abcd
 
 ### Los Rest disponibles son los siguientes:
 
