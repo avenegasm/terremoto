@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Import
 import org.springframework.test.util.ReflectionTestUtils
 import spock.lang.*
 
-@Import([TestMockingConfig])
 class EarthquakeServiceImplTest extends Specification {
 
     EarthquakeServiceImpl earthquakeServiceImpl
