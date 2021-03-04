@@ -28,7 +28,7 @@ dependencies {
 	// Spock
 	testCompile 'org.spockframework:spock-core:1.2-groovy-2.5'
 	testCompile 'org.spockframework:spock-spring:1.2-groovy-2.5'
-	testRuntime 'cglib:cglib-nodep:3.2.12'
+	testRuntime 'cglib:cglib-nodep:3.3.0'
 	testCompile 'org.springframework.boot:spring-boot-starter-test'
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
