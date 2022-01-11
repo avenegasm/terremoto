@@ -1,0 +1,16 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: org.springframework.boot
+    versions:
+    - 2.4.3
+    - 2.4.4
+  - dependency-name: org.springframework.boot:spring-boot-starter-security
+    versions:
+    - 2.4.3
+    - 2.4.4
